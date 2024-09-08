@@ -2,6 +2,6 @@
 
 public class Comment
 {
-    public string CommentId { get; set; }
+    public int CommentId { get; set; }
     public string Body { get; set; }
 }
