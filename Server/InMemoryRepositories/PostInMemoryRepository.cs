@@ -11,6 +11,7 @@ public class PostInMemoryRepository : iPostRepository
     public PostInMemoryRepository()
     {
         posts = new List<Post>();
+        InitializeDummyData();
     }
 
     public Task<Post> AddAsync(Post post)
@@ -24,21 +25,56 @@ public class PostInMemoryRepository : iPostRepository
 
     public Task UpdateAsync(Post post)
     {
-        throw new NotImplementedException();
+        Post? existingPost = posts.SingleOrDefault(p => p.PostId == post.PostId);
+        if (existingPost is null)
+        {
+            throw new InvalidOperationException(
+                $"Post with ID '{post.PostId}' not found");
+        }
+
+        posts.Remove(existingPost);
+        posts.Add(post);
+
+        return Task.CompletedTask;
     }
 
     public Task DeleteAsync(int postId)
     {
-        throw new NotImplementedException();
+        Post? postToRemove = posts.SingleOrDefault(p => p.PostId == postId);
+        if (postToRemove is null)
+        {
+            throw new InvalidOperationException(
+                $"Post with ID '{postId}' not found");
+        }
+
+        posts.Remove(postToRemove);
+        return Task.CompletedTask;
     }
 
     public Task<Post> GetSingleAsync(int postId)
     {
-        throw new NotImplementedException();
+        Post? postToFind = posts.SingleOrDefault(p => p.PostId == postId);
+        if (postToFind is null)
+        {
+            throw new InvalidOperationException(
+                $"Post with ID '{postId}' not found");
+        }
+        return Task.FromResult(postToFind);
     }
 
     public IQueryable<Post> GetMany()
     {
-        throw new NotImplementedException();
+        return posts.AsQueryable();
     }
+    
+    public void InitializeDummyData()
+    {
+        posts.AddRange(new List<Post>
+        {
+            new Post { PostId = 1, Title = "First Post", Body = "This is the body of the first post." },
+            new Post { PostId = 2, Title = "Second Post", Body = "This is the body of the second post." },
+            new Post { PostId = 3, Title = "Third Post", Body = "This is the body of the third post." },
+        });
+    }
+    
 }

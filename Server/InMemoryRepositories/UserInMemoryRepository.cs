@@ -10,6 +10,7 @@ public class UserInMemoryRepository : IUserRepository
     public UserInMemoryRepository()
     {
         users = new List<User>();
+        InitializeDummyData();
     }
 
     public Task<User> AddAsync(User user)
@@ -23,21 +24,56 @@ public class UserInMemoryRepository : IUserRepository
 
     public Task UpdateAsync(User user)
     {
-        throw new NotImplementedException();
+        User? existingPost = users.SingleOrDefault(u => u.UserId == user.UserId);
+        if (existingPost is null)
+        {
+            throw new InvalidOperationException(
+                $"User with ID '{user.UserId}' not found");
+        }
+
+        users.Remove(existingPost);
+        users.Add(user);
+
+        return Task.CompletedTask;
     }
 
     public Task DeleteAsync(int userId)
     {
-        throw new NotImplementedException();
+        User? postToRemove = users.SingleOrDefault(u => u.UserId == userId);
+        if (postToRemove is null)
+        {
+            throw new InvalidOperationException(
+                $"Post with ID '{userId}' not found");
+        }
+
+        users.Remove(postToRemove);
+        return Task.CompletedTask;
     }
 
     public Task<User> GetSingleAsync(int userId)
     {
-        throw new NotImplementedException();
+        User? userToFind = users.SingleOrDefault(u => u.UserId == userId);
+        if (userToFind is null)
+        {
+            throw new InvalidOperationException(
+                $"User with ID '{userId}' not found");
+        }
+        return Task.FromResult(userToFind);
     }
 
     public IQueryable<User> GetMany()
     {
-        throw new NotImplementedException();
+        return users.AsQueryable();
     }
+    
+    public void InitializeDummyData()
+    {
+        users.AddRange(new List<User>
+        {
+            new User { UserId = 1, UserName = "JohnDoe", Password = "password123" },
+            new User { UserId = 2, UserName = "JaneSmith", Password = "password456" },
+            new User { UserId = 3, UserName = "AliceJones", Password = "password789" },
+        });
+    }
+    
 }

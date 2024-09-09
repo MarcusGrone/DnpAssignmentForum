@@ -9,4 +9,5 @@ public interface iPostRepository
     Task DeleteAsync(int postId);
     Task<Post> GetSingleAsync(int postId);
     IQueryable<Post> GetMany();
+    void InitializeDummyData();
 }
