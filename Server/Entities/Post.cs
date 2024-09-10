@@ -6,7 +6,10 @@ public class Post
     public string Title { get; set; }
     public string Body { get; set; }
 
-    public Post()
+    public Post(int postId, string title, string body)
     {
+        PostId = postId;
+        Title = title;
+        Body = body;
     }
 }
