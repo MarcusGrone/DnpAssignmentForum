@@ -15,8 +15,7 @@ class Program
 
         CliApp cliApp = new CliApp(userRepository, commentRepository, postRepository);
         await cliApp.StartAsync();
-
-
+        
 
 
     }

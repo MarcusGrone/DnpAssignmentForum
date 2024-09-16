@@ -69,12 +69,12 @@ public class PostInMemoryRepository : iPostRepository
     
     public void InitializeDummyData()
     {
-        var posts = new List<Post>
+        posts.AddRange(new List<Post>
         {
-            new Post(1, "First Post", "This is the body of the first post."),
-            new Post(2, "Second Post", "This is the body of the second post."),
-            new Post(3, "Third Post", "This is the body of the third post.")
-        };
+            new Post( "First Post", "This is the body of the first post."),
+            new Post( "Second Post", "This is the body of the second post."),
+            new Post( "Third Post", "This is the body of the third post.")
+        });
     }
     
 }

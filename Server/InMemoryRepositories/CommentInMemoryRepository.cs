@@ -76,9 +76,9 @@ public class CommentInMemoryRepository : ICommentRepository
     {
         comments.AddRange(new List<Comment>
         {
-            new Comment(1, "First comment"),
-            new Comment(2, "Second comment"),
-            new Comment(3, "Another comment"),
+            new Comment( "First comment"),
+            new Comment( "Second comment"),
+            new Comment( "Another comment"),
         });
     }
 }

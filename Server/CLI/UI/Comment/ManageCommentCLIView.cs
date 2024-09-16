@@ -4,15 +4,35 @@ namespace CLI.UI.Comment;
 
 public class ManageCommentCLIView
 {
-    private readonly ICommentRepository UIcommentRepository;
+    private readonly ICommentRepository _commentRepository;
     
     public ManageCommentCLIView(ICommentRepository commentRepository)
     {
-        UIcommentRepository = commentRepository;
+        _commentRepository = commentRepository;
     }
     
     public async Task ShowMenuAsync()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Comment Management:");
+        Console.WriteLine("1. Add Comment");
+        Console.WriteLine("2. Return to main menu");
+
+        var input = Console.ReadLine();
+
+        switch (input)
+        {
+            case "1":
+                var lifeCycleCommentCLIView =
+                    new LifecycleCommentCLIView(_commentRepository);
+                await lifeCycleCommentCLIView.CreateCommentAsync();
+                break;
+            case "2":
+                Console.WriteLine("Returning to main menu.");
+                break;
+            default:
+                Console.WriteLine("Invalid choice.");
+                break;
+        }
     }
+    
 }

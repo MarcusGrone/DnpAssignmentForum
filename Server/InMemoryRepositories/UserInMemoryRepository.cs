@@ -70,9 +70,9 @@ public class UserInMemoryRepository : IUserRepository
     {
         users.AddRange(new List<User>
         {
-            new User(1, "JohnDoe", "password123"),
-            new User(2, "JaneSmith", "password456"),
-            new User(3, "AliceJones", "password789")
+            new User("JohnDoe", "password123"),
+            new User("JaneSmith", "password456"),
+            new User("AliceJones", "password789")
         });
     }
     
