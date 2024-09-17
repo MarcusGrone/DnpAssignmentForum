@@ -13,20 +13,18 @@ public class ManageUsersCLIView
 
     public async Task ShowMenuAsync()
     {
-        Console.WriteLine("UserManagement:");
-        Console.WriteLine("1. Create, update or delete user");
-        Console.WriteLine("2. See list of users");
-        Console.WriteLine("3. Return to main menu");
-
         while (true)
         {
+            Console.WriteLine("\n UserManagement:");
+            Console.WriteLine("1. Create, update or delete user");
+            Console.WriteLine("2. See list of users");
+            Console.WriteLine("3. Return to main menu");
             var input = Console.ReadLine();
 
             switch (input)
             {
                 case "1":
-                    var lifeCycleUserCliView =
-                        new LifecycleUserCLIView(_userRepository);
+                    var lifeCycleUserCliView = new LifecycleUserCLIView(_userRepository);
                     await lifeCycleUserCliView.ExecuteAsync();
                     break;
                 case "2":
@@ -35,7 +33,7 @@ public class ManageUsersCLIView
                     break;
                 case "3":
                     Console.WriteLine("Returning to main menu.");
-                    break;
+                    return;
                 default:
                     Console.WriteLine("Invalid option");
                     break;

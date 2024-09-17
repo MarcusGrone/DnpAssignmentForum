@@ -6,6 +6,7 @@ namespace InMemoryRepositories;
 public class UserInMemoryRepository : IUserRepository
 {
     private readonly List<User> users;
+    private bool isInitialized = false;
 
     public UserInMemoryRepository()
     {
@@ -66,14 +67,20 @@ public class UserInMemoryRepository : IUserRepository
         return users.AsQueryable();
     }
     
+    
     public void InitializeDummyData()
     {
+        if (isInitialized) return;  
+
+        int nextUserId = 1;
         users.AddRange(new List<User>
         {
-            new User("JohnDoe", "password123"),
-            new User("JaneSmith", "password456"),
-            new User("AliceJones", "password789")
+            new User("JohnDoe", "password123") { UserId = nextUserId++ },
+            new User("JaneSmith", "password456") { UserId = nextUserId++ },
+            new User("AliceJones", "password789") { UserId = nextUserId++ }
         });
+
+        isInitialized = true;
     }
     
 }

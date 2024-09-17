@@ -15,14 +15,15 @@ public class LifecycleCommentCLIView
 
     public async Task CreateCommentAsync()
     {
-        Console.WriteLine("Enter body:");
+        Console.WriteLine("Enter comment:");
         var body = Console.ReadLine();
 
         var newComment = new Entities.Comment(body);
         
         await _commentRepository.AddAsync(newComment);
         
-        Console.WriteLine($"Comment {newComment}, was created successfully");
-        
+        Console.WriteLine($"Comment {newComment.Body}, was created successfully");
+        Console.WriteLine("Press any key to return to the menu...");
+        Console.ReadKey(); 
     }
 }

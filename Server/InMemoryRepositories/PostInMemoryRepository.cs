@@ -7,6 +7,8 @@ namespace InMemoryRepositories;
 public class PostInMemoryRepository : iPostRepository
 {
     private readonly List<Post> posts;
+    private bool isInitialized = false;
+
 
     public PostInMemoryRepository()
     {
@@ -69,12 +71,17 @@ public class PostInMemoryRepository : iPostRepository
     
     public void InitializeDummyData()
     {
+        if (isInitialized) return; 
+
+        int nextPostId = 1;
         posts.AddRange(new List<Post>
         {
-            new Post( "First Post", "This is the body of the first post."),
-            new Post( "Second Post", "This is the body of the second post."),
-            new Post( "Third Post", "This is the body of the third post.")
+            new Post("First Post", "This is the body of the first post.") { PostId = nextPostId++ },
+            new Post("Second Post", "This is the body of the second post.") { PostId = nextPostId++ },
+            new Post("Third Post", "This is the body of the third post.") { PostId = nextPostId++ }
         });
+
+        isInitialized = true; 
     }
     
 }

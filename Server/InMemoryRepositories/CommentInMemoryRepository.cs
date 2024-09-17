@@ -7,6 +7,8 @@ public class CommentInMemoryRepository : ICommentRepository
 
 {
     private readonly List<Comment> comments;
+    private bool isInitialized = false;
+
 
     public CommentInMemoryRepository()
     {
@@ -74,11 +76,16 @@ public class CommentInMemoryRepository : ICommentRepository
 
     public void InitializeDummyData()
     {
+        if (isInitialized) return; 
+
+        int nextCommentId = 1;
         comments.AddRange(new List<Comment>
         {
-            new Comment( "First comment"),
-            new Comment( "Second comment"),
-            new Comment( "Another comment"),
+            new Comment("First comment") { CommentId = nextCommentId++ },
+            new Comment("Second comment") { CommentId = nextCommentId++ },
+            new Comment("Another comment") { CommentId = nextCommentId++ }
         });
+
+        isInitialized = true; 
     }
 }

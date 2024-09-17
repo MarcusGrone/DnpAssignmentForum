@@ -24,10 +24,9 @@ public class ListUserCLIView
         foreach (var user in users)
         {
             Console.WriteLine(
-                $"User ID: {user.UserId}, Username: {user.UserName}");
+                $"User ID: {user.UserId}, Username: {user.UserName}, Password: {user.Password}");
         }
-
-
+        
         await Task.CompletedTask;
     }
 }

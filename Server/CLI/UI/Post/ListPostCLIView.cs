@@ -24,7 +24,7 @@ public class ListPostCLIView
             foreach (var post in posts)
             {
                 Console.WriteLine(
-                    $"Post ID: {post.PostId}, Title: {post.Title}");
+                    $"Post ID: {post.PostId}, Title: {post.Title}, Body: {post.Body}");
             }
         }
 

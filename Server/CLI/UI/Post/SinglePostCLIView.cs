@@ -16,23 +16,32 @@ public class SinglePostCLIView
         Console.WriteLine("Enter the Post ID:");
         if (int.TryParse(Console.ReadLine(), out var postId))
         {
-            var post = await _postRepository.GetSingleAsync(postId);
-            if (post != null)
+            try
             {
-                Console.WriteLine($"Post ID: {post.PostId}");
-                Console.WriteLine($"Title: {post.Title}");
-                Console.WriteLine($"Body: {post.Body}");
+                var post = await _postRepository.GetSingleAsync(postId);
+                if (post != null)
+                {
+                    Console.WriteLine($"Post ID: {post.PostId}");
+                    Console.WriteLine($"Title: {post.Title}");
+                    Console.WriteLine($"Body: {post.Body}");
+                }
+                else
+                {
+                    Console.WriteLine("Post not found.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Post not found.");
+                Console.WriteLine($"Unable to comply5: {ex.Message}");
             }
         }
         else
         {
-            Console.WriteLine("Invalid Post ID.");
+            Console.WriteLine("Invalid Post ID format.");
         }
 
-        await Task.CompletedTask;
+        Console.WriteLine("Press any key to return to the menu...");
+        Console.ReadKey();
     }
+
 }

@@ -23,7 +23,7 @@ public class CliApp
     {
         while (true)
         {
-            Console.WriteLine("Forum CLI activated; Please enter:");
+            Console.WriteLine("\nForum CLI activated; Please enter:");
             Console.WriteLine("1. Manage users");
             Console.WriteLine("2. Manage posts");
             Console.WriteLine("3. Manage comments");
@@ -59,11 +59,12 @@ public class CliApp
                     _commentRepository.InitializeDummyData();
                     Console.WriteLine("Dummy data generated.");
                     break;
+                
                 default:
                     Console.WriteLine("Invalid number, please enter 1-5.");
                 break;
             }
-            Console.WriteLine("Press any key to restat loop");
+            Console.WriteLine("\nPress any key to restart Main menu");
             Console.ReadKey();
         }
         

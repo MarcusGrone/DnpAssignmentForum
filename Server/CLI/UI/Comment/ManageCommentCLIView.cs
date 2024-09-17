@@ -13,7 +13,9 @@ public class ManageCommentCLIView
     
     public async Task ShowMenuAsync()
     {
-        Console.WriteLine("Comment Management:");
+        while(true)
+        {
+        Console.WriteLine("\nComment Management:");
         Console.WriteLine("1. Add Comment");
         Console.WriteLine("2. Return to main menu");
 
@@ -28,11 +30,11 @@ public class ManageCommentCLIView
                 break;
             case "2":
                 Console.WriteLine("Returning to main menu.");
-                break;
+                return;
             default:
                 Console.WriteLine("Invalid choice.");
                 break;
         }
     }
-    
+    }
 }
