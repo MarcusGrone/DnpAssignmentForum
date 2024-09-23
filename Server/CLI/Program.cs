@@ -5,6 +5,9 @@ using RepositoryContracts;
 
 namespace CLI;
 
+// Change Repository to change between written jsonfile or the data shown directly in the CLI.
+
+
 class Program
 {
     static async Task Main(string[] args)
