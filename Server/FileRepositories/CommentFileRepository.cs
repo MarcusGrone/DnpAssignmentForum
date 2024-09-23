@@ -53,6 +53,7 @@ public class CommentFileRepository : ICommentRepository
         await File.WriteAllTextAsync(filePath, commentAsJson);
     }
 
+
     public async Task DeleteAsync(int commentId)
     {
         string commentAsJson = await File.ReadAllTextAsync(filePath);
@@ -71,43 +72,45 @@ public class CommentFileRepository : ICommentRepository
         }
         else
         {
-            throw new InvalidOperationException($"CommentId:{commentId} not found");
+            throw new InvalidOperationException(
+                $"CommentId:{commentId} not found");
         }
     }
+
 
     public async Task<Comment> GetSingleAsync(int commentId)
     {
         string commentAsJson = await File.ReadAllTextAsync(filePath);
-        List<Comment>? comments = JsonSerializer.Deserialize<List<Comment>>(commentAsJson) ?? new List<Comment>();
+        List<Comment> comments =
+            JsonSerializer.Deserialize<List<Comment>>(commentAsJson);
 
         return comments.FirstOrDefault(c => c.CommentId == commentId);
     }
 
+
     public IQueryable<Comment> GetMany()
     {
         string commentsAsJson = File.ReadAllTextAsync(filePath).Result;
-        List<Comment>? comments = JsonSerializer.Deserialize<List<Comment>>(commentsAsJson) ?? new List<Comment>();
+        List<Comment> comments =
+            JsonSerializer.Deserialize<List<Comment>>(commentsAsJson);
 
         return comments.AsQueryable();
     }
 
+
     public void InitializeDummyData()
     {
-        string existingData =  File.ReadAllTextAsync(filePath).Result;
- 
-        if (!string.IsNullOrWhiteSpace(existingData) && existingData != "[]")
+        int nextCommentId = 1;
+        
+        List<Comment> comments = new List<Comment>
         {
-            return;
-        }
-
-        List<User> users = new List<User>
-        {
-            new User("JohnDoe", "password123") { UserId = 1 },
-            new User("JaneSmith", "password456") { UserId = 2 },
-            new User("AliceJones", "password789") { UserId = 3 }
+            new Comment("First comment") { CommentId = nextCommentId++ },
+            new Comment("Second comment") { CommentId = nextCommentId++ },
+            new Comment("Another comment") { CommentId = nextCommentId++ }
         };
 
-        string usersAsJson = JsonSerializer.Serialize(users);
-        File.WriteAllTextAsync(filePath, usersAsJson).Wait();
+       
+        string commentAsJson = JsonSerializer.Serialize(comments);
+        File.WriteAllText(filePath, commentAsJson);
     }
 }

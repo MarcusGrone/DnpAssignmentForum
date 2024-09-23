@@ -22,36 +22,97 @@ public class PostFileRepository : iPostRepository
         string postAsJson = await File.ReadAllTextAsync(filePath);
         List<Post> posts =
             JsonSerializer.Deserialize<List<Post>>(postAsJson);
+        
         int maxId = posts.Count > 0 ? posts.Max(p => p.PostId) : 0;
         post.PostId = maxId + 1;
+        
         posts.Add(post);
+        
         postAsJson = JsonSerializer.Serialize(posts);
         await File.WriteAllTextAsync(filePath, postAsJson);
         return post;
     }
 
+    
+    
     public async Task UpdateAsync(Post post)
     {
-        throw new NotImplementedException();
+        string postAsJson = await File.ReadAllTextAsync(filePath);
+        List<Post> posts =
+            JsonSerializer.Deserialize<List<Post>>(postAsJson);
+
+        var exsistingPost = posts.FirstOrDefault(p => p.PostId == post.PostId);
+        if (exsistingPost == null)
+        {
+            throw new InvalidCastException("Post not found");
+        }
+
+        exsistingPost.Title = post.Title;
+        exsistingPost.Body = post.Body;
+
+        postAsJson = JsonSerializer.Serialize(posts);
+        await File.WriteAllTextAsync(filePath, postAsJson);
+     
     }
 
+    
+    
     public async Task DeleteAsync(int postId)
     {
-        throw new NotImplementedException();
+        string postAsJson = await File.ReadAllTextAsync(filePath);
+        List<Post> posts =
+            JsonSerializer.Deserialize<List<Post>>(postAsJson);
+
+        var postToRemove = posts.FirstOrDefault(p => p.PostId == postId);
+        if (postToRemove != null)
+        {
+            posts.Remove(postToRemove);
+
+            postAsJson = JsonSerializer.Serialize(posts);
+            await File.WriteAllTextAsync(filePath, postAsJson);
+        }
+        else
+        {
+            throw new InvalidOperationException($"postId:{postId} not found");
+        }
     }
 
+    
+    
     public async Task<Post> GetSingleAsync(int postId)
     {
-        throw new NotImplementedException();
+        string postAsJson = await File.ReadAllTextAsync(filePath);
+        List<Post> posts =
+            JsonSerializer.Deserialize<List<Post>>(postAsJson);
+
+        return posts.FirstOrDefault(p => p.PostId == postId);
     }
 
+    
+    
     public IQueryable<Post> GetMany()
     {
-        throw new NotImplementedException();
+        string postAsJson =  File.ReadAllTextAsync(filePath).Result;
+        List<Post> posts =
+            JsonSerializer.Deserialize<List<Post>>(postAsJson);
+
+        return posts.AsQueryable();
+
     }
 
+    
+    
     public void InitializeDummyData()
     {
-        throw new NotImplementedException();
+        int nextPostId = 1;
+
+        List<Post> posts = new List<Post>
+        {
+            new Post("First Post", "This is the first post.") { PostId = nextPostId++ },
+            new Post("Second Post", "This is the second post.") { PostId = nextPostId++ }
+        };
+
+        string postAsJson = JsonSerializer.Serialize(posts);
+        File.WriteAllText(filePath, postAsJson);
     }
 }
