@@ -2,7 +2,7 @@
 
 namespace RepositoryContracts;
 
-public interface iPostRepository
+public interface IPostRepository
 {
     Task<Post> AddAsync(Post post);
     Task UpdateAsync(Post post);

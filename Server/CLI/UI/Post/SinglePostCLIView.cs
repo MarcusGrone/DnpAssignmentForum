@@ -4,9 +4,9 @@ namespace CLI.UI.Post;
 
 public class SinglePostCLIView
 {
-    private readonly iPostRepository _postRepository;
+    private readonly IPostRepository _postRepository;
 
-    public SinglePostCLIView(iPostRepository postRepository)
+    public SinglePostCLIView(IPostRepository postRepository)
     {
         _postRepository = postRepository;
     }

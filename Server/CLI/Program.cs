@@ -15,12 +15,11 @@ class Program
         Console.WriteLine("Starting CliApp.cs");
         IUserRepository userRepository = new UserFileRepository(); // CLI: UserInMemoryRepository
         ICommentRepository commentRepository = new CommentFileRepository(); // CLI: CommentInMemoryRepository
-        iPostRepository postRepository = new PostFileRepository(); // CLI: CommentInMemoryRepository
+        IPostRepository postRepository = new PostFileRepository(); // CLI: CommentInMemoryRepository
 
         CliApp cliApp = new CliApp(userRepository, commentRepository, postRepository);
         await cliApp.StartAsync();
         
-
 
     }
 }

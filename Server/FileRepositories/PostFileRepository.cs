@@ -4,7 +4,7 @@ using RepositoryContracts;
 
 namespace FileRepositories;
 
-public class PostFileRepository : iPostRepository
+public class PostFileRepository : IPostRepository
 {
     private readonly string filePath = "posts.json";
 

@@ -3,9 +3,9 @@ using RepositoryContracts;
 
 public class LifecyclePostCLIView
 {
-    private readonly iPostRepository _postRepository;
+    private readonly IPostRepository _postRepository;
 
-    public LifecyclePostCLIView(iPostRepository postRepository)
+    public LifecyclePostCLIView(IPostRepository postRepository)
     {
         _postRepository = postRepository;
     }

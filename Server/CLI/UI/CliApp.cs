@@ -9,10 +9,10 @@ public class CliApp
 {
     private readonly IUserRepository _userRepository;
     private readonly ICommentRepository _commentRepository;
-    private readonly iPostRepository _postRepository;
+    private readonly IPostRepository _postRepository;
 
     public CliApp(IUserRepository userRepository,
-        ICommentRepository commentRepository, iPostRepository postRepository)
+        ICommentRepository commentRepository, IPostRepository postRepository)
     {
         _userRepository = userRepository;
         _commentRepository = commentRepository;
