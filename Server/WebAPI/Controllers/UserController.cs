@@ -26,7 +26,7 @@ public class UserController : ControllerBase
 
         var dto = new UserDto
         {
-            Id = createdUser.Id,
+            Id = createdUser.UserId,
             UserName = createdUser.UserName
         };
 
@@ -56,7 +56,7 @@ public class UserController : ControllerBase
 
         var dto = new UserDto
         {
-            Id = user.Id,
+            Id = user.UserId,
             UserName = user.UserName
         };
 
@@ -77,7 +77,7 @@ public class UserController : ControllerBase
 
         var dtos = users.Select(user => new UserDto
         {
-            Id = user.Id,
+            Id = user.UserId,
             UserName = user.UserName
         });
 

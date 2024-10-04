@@ -30,10 +30,6 @@ public class CommentsController : ControllerBase
         return CreatedAtAction(nameof(GetSingleComment), new { id = dto.CommentId }, dto);
     }
 
-    public class CommentDto
-    {
-    }
-
    
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateComment(int id, [FromBody] UpdateCommentDto request)
@@ -65,13 +61,13 @@ public class CommentsController : ControllerBase
 
 
     [HttpGet]
-    public IActionResult GetManyComments([FromQuery] int? postId)
+    public IActionResult GetManyComments([FromQuery] int? commentId)
     {
         var comments = _commentRepository.GetMany();
 
-        if (postId.HasValue)
+        if (commentId.HasValue)
         {
-            comments = comments.Where(c => c.PostId == postId.Value);
+            comments = comments.Where(c => c.CommentId == commentId.Value);
         }
 
         var dtos = comments.Select(comment => new CommentDto
