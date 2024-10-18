@@ -86,7 +86,7 @@ public class PostsController : ControllerBase
         return Ok(dtos);
     }
 
-    // DELETE api/posts/{id}
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePost(int id)
     {
