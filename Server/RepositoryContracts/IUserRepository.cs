@@ -9,5 +9,5 @@ public interface IUserRepository
     Task DeleteAsync(int userId);
     Task<User> GetSingleAsync(int userId);
     IQueryable<User> GetMany();
-    void InitializeDummyData();
+   // void InitializeDummyData();
 }

@@ -12,7 +12,7 @@ public class PostInMemoryRepository : IPostRepository
     public PostInMemoryRepository()
     {
         posts = new List<Post>();
-        InitializeDummyData();
+        //InitializeDummyData();
     }
 
     public Task<Post> AddAsync(Post post)
@@ -68,7 +68,7 @@ public class PostInMemoryRepository : IPostRepository
         return posts.AsQueryable();
     }
     
-    public void InitializeDummyData()
+  /*  public void InitializeDummyData()
     {
         if (isInitialized) return; 
 
@@ -81,6 +81,6 @@ public class PostInMemoryRepository : IPostRepository
         });
 
         isInitialized = true; 
-    }
+    }*/
     
 }

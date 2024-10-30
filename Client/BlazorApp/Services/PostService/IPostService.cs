@@ -12,6 +12,6 @@ namespace BlazorApp.Services.PostService
         Task<PostDto> CreatePostAsync(CreatePostDto dto);
         Task<PostDto> UpdatePostAsync(int postId, UpdatePostDto dto);
         Task<bool> DeletePostAsync(int postId);
-        Task<IEnumerable<CommentDto>> GetCommentsForPostAsync(int postId);
+        Task<List<CommentDto>> GetCommentsForPostAsync(int postId);
     }
 }

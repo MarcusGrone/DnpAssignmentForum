@@ -106,7 +106,7 @@ namespace BlazorApp.Services.PostService
         }
 
      
-        public async Task<IEnumerable<CommentDto>> GetCommentsForPostAsync(
+        public async Task<List<CommentDto>> GetCommentsForPostAsync(
             int postId)
         {
             HttpResponseMessage httpResponse =
@@ -117,7 +117,7 @@ namespace BlazorApp.Services.PostService
                 throw new Exception(response);
             }
 
-            return JsonSerializer.Deserialize<IEnumerable<CommentDto>>(response,
+            return JsonSerializer.Deserialize<List<CommentDto>>(response,
                 new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true

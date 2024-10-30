@@ -1,0 +1,41 @@
+﻿@page "/posts"
+@using ApiContracts.DTO_Post
+@using BlazorApp.Services.PostService
+@rendermode InteractiveServer
+@inject IPostService PostService
+
+<h3>Create Post</h3>
+
+<EditForm Model="newPost" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Title:</label>
+        <InputText @bind-Value="newPost.Title" />
+        <ValidationMessage For="@(() => newPost.Title)" />
+    </div>
+
+    <div>
+        <label>Body:</label>
+        <InputTextArea @bind-Value="newPost.Body" />
+        <ValidationMessage For="@(() => newPost.Body)" />
+    </div>
+
+    <button type="submit">Create Post</button>
+</EditForm>
+
+@code {
+    private CreatePostDto newPost = new CreatePostDto
+    {
+        Title = null,
+        Body = null,
+        AuthorId = 1
+    };
+
+    private async Task HandleValidSubmit()
+    {
+        await PostService.CreatePostAsync(newPost);
+  
+    }
+}

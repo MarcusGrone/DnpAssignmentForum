@@ -1,0 +1,68 @@
+﻿@page "/users"
+@using ApiContracts.Dto_User
+@using BlazorApp.Services.UserService
+@rendermode InteractiveServer
+
+@inject IUserService UserService
+
+<h3>Add New User</h3>
+
+<input @bind="newUser.UserName" placeholder="Insert username"/>
+<input @bind="newUser.Password" placeholder="Insert password"/>
+
+<button @onclick="AddUser">Add User</button>
+
+<h3>Users</h3>
+<ul>
+    @if (users != null && users.Any())
+    {
+        @foreach (var user in users)
+        {
+            <li>@user.UserName</li>
+        }
+    }
+    else
+    {
+        <p>No users available.</p>
+    }
+</ul>
+
+@code {
+    private CreateUserDto newUser = new()
+    {
+        UserName = null,
+        Password = null
+    };
+  
+
+    private List<UserDto> users = new();
+    
+    private async Task AddUser()
+    {
+        if (string.IsNullOrWhiteSpace(newUser.UserName) || string.IsNullOrWhiteSpace(newUser.Password))
+        {
+            throw new Exception("User must contain a username and password.");
+        }
+
+        try
+        {
+            await UserService.CreateUserAsync(newUser);
+            await LoadUsers(); 
+            newUser = new CreateUserDto()
+            {
+                UserName = string.Empty,
+                Password = string.Empty
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task LoadUsers()
+    {
+        users = (await UserService.GetUserAsync()).ToList();
+        Console.WriteLine($"Loaded users: {string.Join(", ", users.Select(u => u.UserName))}");
+    }
+}

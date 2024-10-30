@@ -98,7 +98,7 @@ public class CommentFileRepository : ICommentRepository
     }
 
 
-    public void InitializeDummyData()
+ /*   public void InitializeDummyData()
     {
         int nextCommentId = 1;
         
@@ -112,5 +112,5 @@ public class CommentFileRepository : ICommentRepository
        
         string commentAsJson = JsonSerializer.Serialize(comments);
         File.WriteAllText(filePath, commentAsJson);
-    }
+    }*/
 }

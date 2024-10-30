@@ -52,13 +52,13 @@ public class CliApp
                 case "4":
                     Console.WriteLine("Exiting Forum CLI...");
                     break;
-                case "5":
+              /*  case "5":
                     Console.WriteLine("Inserting dummy data...");
                     _userRepository.InitializeDummyData();
                     _postRepository.InitializeDummyData();
                     _commentRepository.InitializeDummyData();
                     Console.WriteLine("Dummy data generated.");
-                    break;
+                    break;*/
                 
                 default:
                     Console.WriteLine("Invalid number, please enter 1-5.");

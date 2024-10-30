@@ -102,7 +102,7 @@ public class PostFileRepository : IPostRepository
 
     
     
-    public void InitializeDummyData()
+   /* public void InitializeDummyData()
     {
         int nextPostId = 1;
 
@@ -114,5 +114,5 @@ public class PostFileRepository : IPostRepository
 
         string postAsJson = JsonSerializer.Serialize(posts);
         File.WriteAllText(filePath, postAsJson);
-    }
+    } */
 }

@@ -9,5 +9,5 @@ public interface ICommentRepository
     Task DeleteAsync(int commentId);
     Task<Comment> GetSingleAsync(int commentId);
     IQueryable<Comment> GetMany();
-    void InitializeDummyData();
+    // void InitializeDummyData();
 }
