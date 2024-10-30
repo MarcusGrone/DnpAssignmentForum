@@ -1,0 +1,99 @@
+﻿@page "/forum"
+@using ApiContracts.DTO_Comment
+@using ApiContracts.DTO_Post
+@using BlazorApp.Services.CommentService
+@using BlazorApp.Services.PostService
+@rendermode InteractiveServer
+@inject IPostService PostService
+@inject ICommentService CommentService
+
+<h3>Forum</h3>
+
+<div class="container">
+
+    <div class="row">
+        @foreach (var post in posts)
+        {
+            <div class="col-md-4 mb-3">
+                <Card Style="width:18rem;">
+                    <CardBody>
+                        <CardTitle>@post.Title</CardTitle>
+                        <CardSubTitle Class="mb-2 text-muted">by @post.AuthorId</CardSubTitle>
+                        <CardText>@post.Body.Substring(0, Math.Min(post.Body.Length, 100))...</CardText>
+                        <CardLink To="#" @onclick="() => SelectPost(post.PostId)">Read More</CardLink>
+                    </CardBody>
+                </Card>
+            </div>
+        }
+    </div>
+
+
+    @if (selectedPost != null)
+    {
+        <div class="comment-section mt-4">
+            <div>
+                <h4>@selectedPost.Title</h4>
+                <p>@selectedPost.Body</p>
+                <p><small>Author: @selectedPost.AuthorId</small></p>
+
+                <hr />
+
+                <h5>Comments</h5>
+                <ul class="list-group">
+                    @foreach (var comment in comments)
+                    {
+                        <li class="list-group-item">
+                            <strong>@comment.AuthorId:</strong> @comment.Body
+                        </li>
+                    }
+                </ul>
+
+                <div class="mt-3">
+                    <textarea @bind="newComment.Body" class="form-control" placeholder="Add a comment..."></textarea>
+                    <button class="btn btn-primary mt-2" @onclick="AddComment">Add Comment</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<PostDto> posts = new List<PostDto>();
+    private PostDto? selectedPost;
+    private List<CommentDto> comments = new List<CommentDto>();
+    private CreateCommentDto newComment = new CreateCommentDto
+    {
+        Body = null,
+        AuthorId = 1
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = (await PostService.GetPostsAsync()).ToList();
+    }
+
+    private async Task SelectPost(int postId)
+    {
+        selectedPost = await PostService.GetPostByIdAsync(postId);
+        comments = (await PostService.GetCommentsForPostAsync(postId)).ToList();
+        newComment = new CreateCommentDto
+        {
+            Body = null,
+            AuthorId = 1
+        }; 
+    }
+
+    private async Task AddComment()
+    {
+        if (selectedPost != null && !string.IsNullOrWhiteSpace(newComment.Body))
+        {
+            await CommentService.CreateCommentAsync(selectedPost.PostId, newComment);
+            comments = (await PostService.GetCommentsForPostAsync(selectedPost.PostId)).ToList();
+            newComment = new CreateCommentDto
+            {
+                Body = null,
+                AuthorId = 1
+            };
+        }
+    }
+}
