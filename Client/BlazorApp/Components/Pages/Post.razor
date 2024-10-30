@@ -13,20 +13,18 @@
     <div>
         <label>Title:</label>
         <InputText @bind-Value="newPost.Title" />
-        <ValidationMessage For="@(() => newPost.Title)" />
     </div>
 
     <div>
         <label>Body:</label>
         <InputTextArea @bind-Value="newPost.Body" />
-        <ValidationMessage For="@(() => newPost.Body)" />
     </div>
 
-    <button type="submit">Create Post</button>
+    <button @onclick="HandleValidSubmit">Add Post</button>
 </EditForm>
 
 @code {
-    private CreatePostDto newPost = new CreatePostDto
+    private CreatePostDto newPost = new()
     {
         Title = null,
         Body = null,

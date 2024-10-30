@@ -18,7 +18,7 @@ namespace BlazorApp.Services.UserService
         public async Task<UserDto> CreateUserAsync(CreateUserDto request)
         {
             HttpResponseMessage httpResponse =
-                await _client.PostAsJsonAsync("users", request);
+                await _client.PostAsJsonAsync("/users", request);
             string response = await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {
@@ -31,6 +31,7 @@ namespace BlazorApp.Services.UserService
                     PropertyNameCaseInsensitive = true
                 })!;
         }
+        
 
         public async Task<UserDto> UpdateUserAsync(int id,
             UpdateUserDto request)

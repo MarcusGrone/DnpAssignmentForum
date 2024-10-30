@@ -6,6 +6,8 @@ public class Post
     public int UserId { get; set; }
     public string Title { get; set; }
     public string Body { get; set; }
+    
+    public Post() { }
 
     public Post(int postId, int userId, string title, string body)
     {
@@ -15,8 +17,12 @@ public class Post
         Body = body;
     }
 
-    public Post(string requestTitle, string requestBody)
+    public Post(string requestTitle, string requestBody, int requestAuthorId)
     {
-        throw new NotImplementedException();
+        Title = requestTitle;
+        Body = requestBody;
+        UserId = requestAuthorId;
     }
+    
+    
 }

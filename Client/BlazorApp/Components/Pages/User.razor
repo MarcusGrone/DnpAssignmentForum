@@ -12,20 +12,6 @@
 
 <button @onclick="AddUser">Add User</button>
 
-<h3>Users</h3>
-<ul>
-    @if (users != null && users.Any())
-    {
-        @foreach (var user in users)
-        {
-            <li>@user.UserName</li>
-        }
-    }
-    else
-    {
-        <p>No users available.</p>
-    }
-</ul>
 
 @code {
     private CreateUserDto newUser = new()
@@ -47,7 +33,6 @@
         try
         {
             await UserService.CreateUserAsync(newUser);
-            await LoadUsers(); 
             newUser = new CreateUserDto()
             {
                 UserName = string.Empty,
@@ -59,10 +44,5 @@
             Console.WriteLine(ex.Message);
         }
     }
-
-    private async Task LoadUsers()
-    {
-        users = (await UserService.GetUserAsync()).ToList();
-        Console.WriteLine($"Loaded users: {string.Join(", ", users.Select(u => u.UserName))}");
-    }
+    
 }

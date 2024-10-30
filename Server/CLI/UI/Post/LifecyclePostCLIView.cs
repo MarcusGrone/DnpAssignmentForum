@@ -50,8 +50,8 @@ public class LifecyclePostCLIView
         Console.WriteLine("Enter post body:");
         var body = Console.ReadLine();
 
-        var newPost = new Post(title, body);
-        await _postRepository.AddAsync(newPost);
+      //  var newPost = new Post(title, body);
+        //await _postRepository.AddAsync(newPost);
 
         Console.WriteLine("Post created successfully.");
         Console.WriteLine("Press any key to return to the menu...");

@@ -6,7 +6,7 @@ using RepositoryContracts;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("api/users")]
+[Route("/users")]
 public class UserController : ControllerBase
 {
     private readonly IUserRepository _userRepository;
@@ -18,20 +18,20 @@ public class UserController : ControllerBase
 
    
     [HttpPost]
-    public async Task<ActionResult<UserDto>> AddUser([FromBody] CreateUserDto request)
+    public async Task<ActionResult<UserDto>> CreateUser([FromBody] CreateUserDto request)
     {
-    
         var user = new User(request.UserName, request.Password);
         var createdUser = await _userRepository.AddAsync(user);
 
-        var dto = new UserDto
+        var userDto = new UserDto
         {
             Id = createdUser.UserId,
             UserName = createdUser.UserName
         };
 
-        return CreatedAtAction(nameof(GetSingleUser), new { id = dto.Id }, dto);
+        return CreatedAtAction(nameof(GetSingleUser), new { id = userDto.Id }, userDto);
     }
+
 
 
     [HttpPut("{id}")]

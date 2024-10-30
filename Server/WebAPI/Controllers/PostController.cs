@@ -7,28 +7,32 @@ using RepositoryContracts;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("api/posts")]
+[Route("/posts")]
 public class PostsController : ControllerBase
 {
     private readonly IPostRepository _postRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly ICommentRepository _commentRepository;
 
-    public PostsController(IPostRepository postRepository)
+
+    public PostsController(IPostRepository postRepository, IUserRepository userRepository, ICommentRepository commentRepository)
     {
-        _postRepository = postRepository;
+        _postRepository = postRepository  ?? throw new ArgumentNullException(nameof(postRepository));
+        _userRepository = userRepository  ?? throw new ArgumentNullException(nameof(userRepository));
     }
 
- 
     [HttpPost]
     public async Task<ActionResult<PostDto>> CreatePost([FromBody] CreatePostDto request)
     {
-        var post = new Post(request.Title, request.Body);
+        var post = new Post(request.Title, request.Body, request.AuthorId);
         var createdPost = await _postRepository.AddAsync(post);
 
         var dto = new PostDto
         {
             PostId = createdPost.PostId,
             Title = createdPost.Title,
-            Body = createdPost.Body
+            Body = createdPost.Body,
+            AuthorId = createdPost.UserId
         };
 
         return CreatedAtAction(nameof(GetSinglePost), new { id = dto.PostId }, dto);

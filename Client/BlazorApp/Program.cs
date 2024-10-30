@@ -17,7 +17,7 @@ public class Program
 
         builder.Services.AddScoped(sp => new HttpClient
         {
-            BaseAddress = new Uri("http://localhost:5277")
+            BaseAddress = new Uri("http://localhost:5059")
         });
 
         builder.Services.AddScoped<ICommentService, HttpCommentService>();

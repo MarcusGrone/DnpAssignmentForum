@@ -57,7 +57,7 @@ namespace BlazorApp.Services.PostService
         public async Task<PostDto> CreatePostAsync(CreatePostDto dto)
         {
             HttpResponseMessage httpResponse =
-                await _client.PostAsJsonAsync("posts", dto);
+                await _client.PostAsJsonAsync("/posts", dto);
             string response = await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {

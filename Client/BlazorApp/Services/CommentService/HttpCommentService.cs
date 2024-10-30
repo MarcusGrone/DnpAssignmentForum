@@ -40,7 +40,7 @@ namespace BlazorApp.Services.CommentService
         {
             HttpResponseMessage httpResponse =
                 await _client.PostAsJsonAsync(
-                    $"comments/posts/{postId}/comments", dto);
+                    $"/comments/posts/{postId}/comments", dto);
             string response = await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {

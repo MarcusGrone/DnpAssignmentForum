@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RepositoryContracts;
 
 [ApiController]
-[Route("api/comments")]
+[Route("/comments")]
 public class CommentsController : ControllerBase
 {
     private readonly ICommentRepository _commentRepository;
