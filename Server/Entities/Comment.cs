@@ -8,10 +8,15 @@ public class Comment
     public string Body { get; set; }
     
 
-    public Comment(string body)
+    public Comment(string body, int userId, int postId)
     {
         Body = body;
+        UserId = userId;
+        PostId = postId;
     }
 
-  
+    public Comment()
+    {
+    
+    }
 }

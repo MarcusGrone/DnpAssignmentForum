@@ -13,7 +13,6 @@ public class CommentInMemoryRepository : ICommentRepository
     public CommentInMemoryRepository()
     {
         comments = new List<Comment>();
-        InitializeDummyData();
     }
 
     public Task<Comment> AddAsync(Comment comment)
@@ -74,7 +73,7 @@ public class CommentInMemoryRepository : ICommentRepository
         return comments.AsQueryable();
     }
 
-    public void InitializeDummyData()
+  /*  public void InitializeDummyData()
     {
         if (isInitialized) return; 
 
@@ -87,5 +86,5 @@ public class CommentInMemoryRepository : ICommentRepository
         });
 
         isInitialized = true; 
-    }
+    } */
 }

@@ -13,60 +13,46 @@
     <div class="row">
         @foreach (var post in posts)
         {
-            <div class="col-md-4 mb-3">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">@post.Title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">by User @post.AuthorId</h6>
-                        <p class="card-text">@post.Body.Substring(0, Math.Min(post.Body.Length, 100))...</p>
-                        <a href="#" class="card-link" @onclick="() => SelectPost(post.PostId)">Read More</a>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-
-    @if (selectedPost != null)
-    {
-        <div class="comment-section mt-4">
-            <div>
-                <h4>@selectedPost.Title</h4>
-                <p>@selectedPost.Body</p>
-                <p>
-                    <small>Author: @selectedPost.AuthorId</small>
-                </p>
-
-                <hr/>
-
-                <h5>Comments</h5>
-                <ul class="list-group">
-                    @foreach (var comment in comments)
-                    {
-                        <li class="list-group-item">
-                            <strong>User @comment.AuthorId:</strong> @comment.Body
-                        </li>
-                    }
-                </ul>
-
-                <div class="mt-3">
-                    <textarea @bind="newComment.Body" class="form-control" placeholder="Add a comment..."></textarea>
-                    <button class="btn btn-primary mt-2" @onclick="AddComment">Add Comment</button>
+        <div class="col-md-4 mb-3">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@post.Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">by User @post.AuthorId</h6>
+                    <p class="card-text">@post.Body.Substring(0, Math.Min(post.Body.Length, 100))...</p>
+                    <button class="btn btn-link" @onclick="() => SelectPost(post.PostId)">Open thread</button>
                 </div>
             </div>
         </div>
-    }
+        }
+    </div>
 </div>
+
+@if (selectedPost != null)
+{
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@selectedPost.Title</h5>
+                <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>@selectedPost.Body</p>
+                <p><small>Author: @selectedPost.AuthorId</small></p>
+
+                <hr />
+
+                <h5>Comments</h5>
+                <CommentModule PostId="@selectedPost.PostId" />
+            </div>
+        </div>
+    </div>
+</div>
+}
 
 @code {
     private List<PostDto> posts = new List<PostDto>();
     private PostDto? selectedPost;
-    private List<CommentDto> comments = new List<CommentDto>();
-
-    private CreateCommentDto newComment = new CreateCommentDto
-    {
-        Body = string.Empty,
-        AuthorId = 1
-    };
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,27 +61,14 @@
 
     private async Task SelectPost(int postId)
     {
+        Console.WriteLine($"Selected Post ID: {postId}");
         selectedPost = await PostService.GetPostByIdAsync(postId);
-        comments = (await PostService.GetCommentsForPostAsync(postId)).ToList();
-        newComment = new CreateCommentDto
-        {
-            Body = string.Empty,
-            AuthorId = 1
-        };
+        StateHasChanged(); // Ensure the modal opens with the correct data
     }
 
-    private async Task AddComment()
+    private void CloseModal()
     {
-        if (selectedPost != null && !string.IsNullOrWhiteSpace(newComment.Body))
-        {
-            await CommentService.CreateCommentAsync(selectedPost.PostId, newComment);
-            comments = (await PostService.GetCommentsForPostAsync(selectedPost.PostId)).ToList();
-            newComment = new CreateCommentDto
-            {
-                Body = string.Empty,
-                AuthorId = 1
-            };
-        }
+        selectedPost = null;
+        StateHasChanged(); // Update the UI when the modal is closed
     }
-
 }

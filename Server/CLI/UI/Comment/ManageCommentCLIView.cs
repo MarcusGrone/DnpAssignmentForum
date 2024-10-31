@@ -11,7 +11,7 @@ public class ManageCommentCLIView
         _commentRepository = commentRepository;
     }
     
-    public async Task ShowMenuAsync()
+   /* public async Task ShowMenuAsync()
     {
         while(true)
         {
@@ -35,6 +35,6 @@ public class ManageCommentCLIView
                 Console.WriteLine("Invalid choice.");
                 break;
         }
-    }
-    }
+    }*/
+    
 }

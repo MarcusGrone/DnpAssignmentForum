@@ -4,6 +4,7 @@ namespace ApiContracts.DTO_Comment;
 
 public class CreateCommentDto
 {
-    public required string Body { get; set; }
-    public required int AuthorId { get; set; }
+    public string Body { get; set; }
+    public int AuthorId { get; set; }
+    public int PostId { get; set; }
 }

@@ -44,11 +44,11 @@ public class CliApp
                         new ManagePostCLIView(_postRepository);
                     await managePostsView.ShowMenuAsync();
                     break;
-                case "3":
+                /*case "3":
                     var manageCommentsView =
                         new ManageCommentCLIView(_commentRepository);
                     await manageCommentsView.ShowMenuAsync();
-                    break;
+                    break;*/
                 case "4":
                     Console.WriteLine("Exiting Forum CLI...");
                     break;

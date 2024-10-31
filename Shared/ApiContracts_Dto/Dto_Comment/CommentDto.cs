@@ -7,6 +7,6 @@ public class CommentDto
 {
     public int CommentId { get; set; }
     public string Body { get; set; }
-    public UserDto AuthorId { get; set; }
-    public PostDto PostId { get; set; }
+    public int AuthorId { get; set; }
+    public int PostId { get; set; }
 }

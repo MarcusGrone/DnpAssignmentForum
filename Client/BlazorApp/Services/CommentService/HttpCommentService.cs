@@ -73,6 +73,24 @@ namespace BlazorApp.Services.CommentService
                 })!;
         }
 
+    
+        
+            public async Task<List<CommentDto>> GetCommentsForPostAsync(int postId)
+            {
+                HttpResponseMessage httpResponse = await _client.GetAsync($"comments?postId={postId}");
+                string response = await httpResponse.Content.ReadAsStringAsync();
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new Exception(response);
+                }
+
+                return JsonSerializer.Deserialize<List<CommentDto>>(response,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    })!;
+            }
+
 
         public async Task<bool> DeleteCommentAsync(int commentId)
         {

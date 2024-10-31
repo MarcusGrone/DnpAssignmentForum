@@ -13,7 +13,7 @@ public class LifecycleCommentCLIView
     
     
 
-    public async Task CreateCommentAsync()
+   /* public async Task CreateCommentAsync()
     {
         Console.WriteLine("Enter comment:");
         var body = Console.ReadLine();
@@ -25,5 +25,5 @@ public class LifecycleCommentCLIView
         Console.WriteLine($"Comment {newComment.Body}, was created successfully");
         Console.WriteLine("Press any key to return to the menu...");
         Console.ReadKey(); 
-    }
+    }*/
 }
