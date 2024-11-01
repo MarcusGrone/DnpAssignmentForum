@@ -3,6 +3,7 @@
 @using ApiContracts.DTO_Post
 @using BlazorApp.Services.CommentService
 @using BlazorApp.Services.PostService
+@using BlazorApp.Components.Layout
 @rendermode InteractiveServer
 @inject IPostService PostService
 @inject ICommentService CommentService
@@ -63,12 +64,12 @@
     {
         Console.WriteLine($"Selected Post ID: {postId}");
         selectedPost = await PostService.GetPostByIdAsync(postId);
-        StateHasChanged(); // Ensure the modal opens with the correct data
+        StateHasChanged(); 
     }
 
     private void CloseModal()
     {
         selectedPost = null;
-        StateHasChanged(); // Update the UI when the modal is closed
+        StateHasChanged(); 
     }
 }

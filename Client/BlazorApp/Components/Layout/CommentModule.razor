@@ -26,10 +26,12 @@
     </ul>
 */
     <h6>Add a Comment</h6>
+  <EditForm Model="newComment">
     <div class="mb-3">
         <textarea @bind="newComment.Body" class="form-control" placeholder="Write your comment..."></textarea>
     </div>
     <button class="btn btn-primary" @onclick="AddComment">Submit Comment</button>
+    </EditForm>
 </div>
 
 @code {
@@ -94,7 +96,8 @@
                 Console.WriteLine($"Adding comment to PostId: {PostId}");
                 await CommentService.CreateCommentAsync(PostId, newComment);
                 newComment.Body = string.Empty;
-                await LoadComments(); // Refresh comments after adding
+                await LoadComments(); 
+                StateHasChanged();
             }
             catch (Exception ex)
             {
