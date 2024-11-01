@@ -24,7 +24,7 @@
             <li class="list-group-item text-danger">Error loading comments. Comments list is null.</li>
         }
     </ul>
-*/
+
     <h6>Add a Comment</h6>
   <EditForm Model="newComment">
     <div class="mb-3">
@@ -63,7 +63,7 @@
         try
         {
             Console.WriteLine($"Loading comments for PostId: {PostId}");
-            comments.Clear(); // Clear existing comments before loading
+            comments.Clear(); 
             comments = await CommentService.GetCommentsForPostAsync(PostId);
 
             if (comments == null)
