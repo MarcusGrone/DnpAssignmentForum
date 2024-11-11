@@ -27,6 +27,7 @@ public class Program
         builder.Services.AddScoped<IUserService, HttpUserService>();
         builder.Services.AddScoped<AuthenticationStateProvider, SimpleAuthProvider>();
 
+
         var app = builder.Build();
         if (!app.Environment.IsDevelopment())
         {

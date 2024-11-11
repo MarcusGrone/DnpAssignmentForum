@@ -1,16 +1,18 @@
 ﻿@page "/"
 @inject NavigationManager NavMgr
+
 <PageTitle>Home</PageTitle>
 
-<h1>BlazorForum1.0</h1>
+<h1>BlazorApp 1.8.2</h1>
 
 <AuthorizeView>
     <Authorized>
-        <h3>Hello, @context.User.Identity.Name</h3>
+        <h3>Hello, @context.User.Identity?.Name</h3>
     </Authorized>
     <NotAuthorized>
-        lol you are not logged in!
+        <p>You are not logged in!</p>
     </NotAuthorized>
 </AuthorizeView>
-Here you can browse interesting posts.
-<button @onclick='() => NavMgr.NavigateTo("login")'>go to login</button>
+
+<p>Here you can browse interesting posts.</p>
+<button @onclick='() => NavMgr.NavigateTo("/login")'>Go to Login</button>

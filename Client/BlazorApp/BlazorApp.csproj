@@ -11,4 +11,12 @@
       <ProjectReference Include="..\..\Shared\ApiContracts_Dto\ApiContracts_Dto.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Auth\Login.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\Auth\Login.razor" />
+    </ItemGroup>
+
 </Project>

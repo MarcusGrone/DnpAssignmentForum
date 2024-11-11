@@ -1,5 +1,6 @@
 ﻿@page "/login"
 @using BlazorApp.Auth
+@using BlazorApp.Components.Auth
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager navMgr
@@ -15,7 +16,9 @@
         <button @onclick="LoginAsync">Log in</button>
         @if (!string.IsNullOrEmpty(errorLabel))
         {
-            <p style="color:red">@errorLabel</p>
+            <label style="color: red">
+                @errorLabel
+            </label>
         }
     </NotAuthorized>
     <Authorized>
@@ -27,9 +30,12 @@
     private string userName;
     private string password;
     private string errorLabel;
+    private string statusMessage;
 
     private async Task LoginAsync()
     {
+        errorLabel = "";
+        Console.WriteLine("Login button clicked");
         try
         {
             Console.WriteLine("Attempting to login...");
@@ -41,6 +47,8 @@
             Console.WriteLine($"Login failed: {e.Message}");
             errorLabel = $"Error: {e.Message}";
         }
+
+        StateHasChanged();
     }
 
 }

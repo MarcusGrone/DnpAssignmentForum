@@ -16,19 +16,21 @@ public class AuthController : ControllerBase
         _userRepository = userRepository;
     }
 
-    [HttpPost("login")]
+    [HttpPost(("login"), Name = "Login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
     {
-        Console.WriteLine($"Received login request for username: {request.UserName}");
+        Console.WriteLine(
+            $"Received login request for username: {request.UserName}");
         var user = await _userRepository.GetByUsernameAsync(request.UserName);
-    
+
         if (user == null)
         {
             Console.WriteLine("User not found.");
             return Unauthorized("Invalid username or password");
         }
 
-        Console.WriteLine($"User found: {user.UserName}, Password: {user.Password}");
+        Console.WriteLine(
+            $"User found: {user.UserName}, Password: {user.Password}");
         if (user.Password != request.Password)
         {
             Console.WriteLine("Password mismatch.");
@@ -43,5 +45,4 @@ public class AuthController : ControllerBase
 
         return Ok(userDto);
     }
-
 }
