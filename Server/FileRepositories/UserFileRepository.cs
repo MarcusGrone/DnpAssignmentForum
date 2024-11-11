@@ -6,6 +6,7 @@ namespace FileRepositories;
 
 public class UserFileRepository : IUserRepository
 {
+
     private readonly string filePath = "users.json";
 
     public UserFileRepository()
@@ -100,8 +101,23 @@ public class UserFileRepository : IUserRepository
 
     }
 
+    public async Task<User?> GetByUsernameAsync(string username)
+    {
+   
+        string userAsJson = await File.ReadAllTextAsync(filePath);
+        List<User> users = JsonSerializer.Deserialize<List<User>>(userAsJson);
+        
+        return users.FirstOrDefault(u => u.UserName == username);
+    }
     
-    
+
+
+    public Task<bool> ExistsAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
+
+
     public void InitializeDummyData()
     {
         int nextUserId = 1;

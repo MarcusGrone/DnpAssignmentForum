@@ -66,8 +66,18 @@ public class UserInMemoryRepository : IUserRepository
     {
         return users.AsQueryable();
     }
-    
-    
+
+    public Task<User?> GetByUsernameAsync(string username)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> ExistsAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
+
+
     public void InitializeDummyData()
     {
         if (isInitialized) return;  

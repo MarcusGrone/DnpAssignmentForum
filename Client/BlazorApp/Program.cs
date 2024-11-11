@@ -1,7 +1,9 @@
+using BlazorApp.Auth;
 using BlazorApp.Components;
 using BlazorApp.Services.CommentService;
 using BlazorApp.Services.PostService;
 using BlazorApp.Services.UserService;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BlazorApp;
 
@@ -23,11 +25,12 @@ public class Program
         builder.Services.AddScoped<ICommentService, HttpCommentService>();
         builder.Services.AddScoped<IPostService, HttpPostService>();
         builder.Services.AddScoped<IUserService, HttpUserService>();
+        builder.Services.AddScoped<AuthenticationStateProvider, SimpleAuthProvider>();
 
         var app = builder.Build();
         if (!app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Error", createScopeForErrors: true);
+            app.UseExceptionHandler("/Error");
 
             app.UseHsts();
         }
