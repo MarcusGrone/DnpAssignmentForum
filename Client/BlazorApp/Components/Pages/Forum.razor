@@ -1,9 +1,8 @@
 ﻿@page "/forum"
-@using ApiContracts.DTO_Comment
 @using ApiContracts.DTO_Post
+@using BlazorApp.Components.Layout
 @using BlazorApp.Services.CommentService
 @using BlazorApp.Services.PostService
-@using BlazorApp.Components.Layout
 @rendermode InteractiveServer
 @inject IPostService PostService
 @inject ICommentService CommentService
@@ -14,43 +13,45 @@
     <div class="row">
         @foreach (var post in posts)
         {
-        <div class="col-md-4 mb-3">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">@post.Title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">by User @post.AuthorId</h6>
-                    <p class="card-text">@post.Body.Substring(0, Math.Min(post.Body.Length, 100))...</p>
-                    <button class="btn btn-link" @onclick="() => SelectPost(post.PostId)">Open thread</button>
+            <div class="col-md-4 mb-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">@post.Title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">by User @post.AuthorId</h6>
+                        <p class="card-text">@post.Body.Substring(0, Math.Min(post.Body.Length, 100))...</p>
+                        <button class="btn btn-link" @onclick="() => SelectPost(post.PostId)">Open thread</button>
+                    </div>
                 </div>
             </div>
-        </div>
         }
     </div>
 </div>
 
 @if (selectedPost != null)
 {
-<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">@selectedPost.Title</h5>
-                <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>@selectedPost.Body</p>
-                <p><small>Author: @selectedPost.AuthorId</small></p>
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@selectedPost.Title</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>@selectedPost.Body</p>
+                    <p>
+                        <small>Author: @selectedPost.AuthorId</small>
+                    </p>
 
-                <hr />
-                <CommentModule PostId="@selectedPost.PostId" />
+                    <hr/>
+                    <CommentModule PostId="@selectedPost.PostId"/>
+                </div>
             </div>
         </div>
     </div>
-</div>
 }
 
 @code {
-    private List<PostDto> posts = new List<PostDto>();
+    private List<PostDto> posts = new();
     private PostDto? selectedPost;
 
     protected override async Task OnInitializedAsync()
@@ -62,12 +63,13 @@
     {
         Console.WriteLine($"Selected Post ID: {postId}");
         selectedPost = await PostService.GetPostByIdAsync(postId);
-        StateHasChanged(); 
+        StateHasChanged();
     }
 
     private void CloseModal()
     {
         selectedPost = null;
-        StateHasChanged(); 
+        StateHasChanged();
     }
+
 }

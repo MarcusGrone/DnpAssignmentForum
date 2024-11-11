@@ -1,82 +1,64 @@
 ﻿@using ApiContracts.DTO_Comment
 @using BlazorApp.Services.CommentService
+@using BlazorApp.Services.UserService
 @inject ICommentService CommentService
+@inject IUserService UserService
+@inject AuthenticationStateProvider AuthProvider
 
 <div class="comment-section">
     <h5>Comments</h5>
-     
+
     <ul class="list-group mb-3">
-        @if (comments != null && comments.Any())
+        @if (commentsWithUsernames.Any())
         {
-            @foreach (var comment in comments)
+            @foreach (var comment in commentsWithUsernames)
             {
                 <li class="list-group-item">
-                    <strong>User @comment.AuthorId:</strong> @comment.Body
+                    <strong>@comment.UserName:</strong> @comment.Comment.Body
                 </li>
             }
         }
-        else if (comments != null)
-        {
-            <li class="list-group-item">No comments yet. Be the first to comment!</li>
-        }
         else
         {
-            <li class="list-group-item text-danger">Error loading comments. Comments list is null.</li>
+            <li class="list-group-item">No comments yet. Be the first to comment!</li>
         }
     </ul>
 
     <h6>Add a Comment</h6>
-  <EditForm Model="newComment">
-    <div class="mb-3">
-        <textarea @bind="newComment.Body" class="form-control" placeholder="Write your comment..."></textarea>
-    </div>
-    <button class="btn btn-primary" @onclick="AddComment">Submit Comment</button>
+    <EditForm Model="newComment">
+        <div class="mb-3">
+            <textarea @bind="newComment.Body" class="form-control" placeholder="Write your comment..."></textarea>
+        </div>
+        <button class="btn btn-primary" @onclick="AddComment">Submit Comment</button>
     </EditForm>
 </div>
 
 @code {
     [Parameter] public int PostId { get; set; }
 
-    private List<CommentDto> comments = new List<CommentDto>();
-    private CreateCommentDto newComment = new CreateCommentDto
-    {
-        Body = string.Empty,
-        AuthorId = 1 
-    };
+    private List<(CommentDto Comment, string UserName)> commentsWithUsernames = new();
+    private CreateCommentDto newComment = new() { Body = string.Empty };
 
     protected override async Task OnParametersSetAsync()
     {
-        Console.WriteLine($"OnParametersSetAsync called with PostId: {PostId}");
-
         if (PostId != 0)
         {
-            await LoadComments();
-        }
-        else
-        {
-            Console.WriteLine("PostId is 0 or not set. Skipping LoadComments.");
+            await LoadCommentsWithUsernames();
         }
     }
 
-    private async Task LoadComments()
+    private async Task LoadCommentsWithUsernames()
     {
         try
         {
-            Console.WriteLine($"Loading comments for PostId: {PostId}");
-            comments.Clear(); 
-            comments = await CommentService.GetCommentsForPostAsync(PostId);
+            Console.WriteLine($"Attempting to load comments for PostId: {PostId}");
+            var comments = await CommentService.GetCommentsForPostAsync(PostId);
+            commentsWithUsernames.Clear();
 
-            if (comments == null)
+            foreach (var comment in comments)
             {
-                Console.WriteLine("Comments list is null.");
-            }
-            else if (!comments.Any())
-            {
-                Console.WriteLine("Comments list is empty.");
-            }
-            else
-            {
-                Console.WriteLine($"Comments loaded: {comments.Count}");
+                var user = await UserService.GetSingleUserAsync(comment.AuthorId);
+                commentsWithUsernames.Add((comment, user.UserName));
             }
 
             StateHasChanged();
@@ -91,22 +73,25 @@
     {
         if (!string.IsNullOrWhiteSpace(newComment.Body))
         {
-            try
+            var authState = await AuthProvider.GetAuthenticationStateAsync();
+            var userIdClaim = authState.User.FindFirst("Id");
+
+            if (userIdClaim != null)
             {
-                Console.WriteLine($"Adding comment to PostId: {PostId}");
-                await CommentService.CreateCommentAsync(PostId, newComment);
-                newComment.Body = string.Empty;
-                await LoadComments(); 
-                StateHasChanged();
+                newComment.AuthorId = int.Parse(userIdClaim.Value);
+                newComment.PostId = PostId;
+
+                try
+                {
+                    await CommentService.CreateCommentAsync(PostId, newComment);
+                    newComment.Body = string.Empty;
+                    await LoadCommentsWithUsernames();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error adding comment: {ex.Message}");
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error adding comment: {ex.Message}");
-            }
-        }
-        else
-        {
-            Console.WriteLine("Comment body is empty. Skipping AddComment.");
         }
     }
 }

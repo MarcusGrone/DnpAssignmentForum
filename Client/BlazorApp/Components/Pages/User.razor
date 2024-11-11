@@ -14,15 +14,16 @@
 
 
 @code {
+
     private CreateUserDto newUser = new()
     {
         UserName = null,
         Password = null
     };
-  
+
 
     private List<UserDto> users = new();
-    
+
     private async Task AddUser()
     {
         if (string.IsNullOrWhiteSpace(newUser.UserName) || string.IsNullOrWhiteSpace(newUser.Password))
@@ -33,7 +34,7 @@
         try
         {
             await UserService.CreateUserAsync(newUser);
-            newUser = new CreateUserDto()
+            newUser = new CreateUserDto
             {
                 UserName = string.Empty,
                 Password = string.Empty
@@ -44,5 +45,5 @@
             Console.WriteLine(ex.Message);
         }
     }
-    
+
 }

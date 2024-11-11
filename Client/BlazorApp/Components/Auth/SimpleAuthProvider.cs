@@ -10,8 +10,9 @@ namespace BlazorApp.Auth
     public class SimpleAuthProvider : AuthenticationStateProvider
     {
         private readonly HttpClient _httpClient;
-        private ClaimsPrincipal _currentClaimsPrincipal;
         private readonly IJSRuntime _jsRuntime;
+        private ClaimsPrincipal _currentClaimsPrincipal = new(new ClaimsIdentity());
+        private bool _hasCheckedSessionStorage = false;
 
         public SimpleAuthProvider(HttpClient httpClient, IJSRuntime jsRuntime)
         {
@@ -21,23 +22,20 @@ namespace BlazorApp.Auth
 
         public async Task Login(string userName, string password)
         {
-            HttpResponseMessage response =
-                await _httpClient.PostAsJsonAsync("auth/login",
-                    new LoginRequestDto()
-                        { UserName = userName, Password = password });
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
+                "auth/login",
+                new LoginRequestDto { UserName = userName, Password = password });
 
-            string content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception("Invalid login attempt.");
             }
 
-
-            UserDto userDto = JsonSerializer.Deserialize<UserDto>(content,
-                new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                })!;
+            string content = await response.Content.ReadAsStringAsync();
+            UserDto userDto = JsonSerializer.Deserialize<UserDto>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            })!;
 
             List<Claim> claims = new List<Claim>
             {
@@ -48,46 +46,51 @@ namespace BlazorApp.Auth
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth");
             _currentClaimsPrincipal = new ClaimsPrincipal(identity);
 
+            // Persist the user state in sessionStorage
+            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", JsonSerializer.Serialize(userDto));
 
-            NotifyAuthenticationStateChanged(
-                Task.FromResult(
-                    new AuthenticationState(_currentClaimsPrincipal)));
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_currentClaimsPrincipal)));
         }
 
-        public override async Task<AuthenticationState>
-            GetAuthenticationStateAsync()
+        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            string userAsJson = "";
+            if (!_hasCheckedSessionStorage)
+            {
+                _hasCheckedSessionStorage = true;
+                await RestoreUserFromSessionStorage();
+            }
+
+            return new AuthenticationState(_currentClaimsPrincipal);
+        }
+
+        private async Task RestoreUserFromSessionStorage()
+        {
             try
             {
-                userAsJson = await _jsRuntime.InvokeAsync<string>("sessionStorage.getItem", "currentUser");
+                var userAsJson = await _jsRuntime.InvokeAsync<string>("sessionStorage.getItem", "currentUser");
+                if (!string.IsNullOrEmpty(userAsJson))
+                {
+                    UserDto userDto = JsonSerializer.Deserialize<UserDto>(userAsJson)!;
+                    List<Claim> claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, userDto.UserName),
+                        new Claim("Id", userDto.Id.ToString())
+                    };
+                    ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth");
+                    _currentClaimsPrincipal = new ClaimsPrincipal(identity);
+                }
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
-                return new AuthenticationState(new());
+                // JS interop failed during prerendering; ignore and try later in the component lifecycle
             }
-
-            if (string.IsNullOrEmpty(userAsJson))
-            {
-                return new AuthenticationState(new());
-            }
-
-            UserDto userDto = JsonSerializer.Deserialize<UserDto>(userAsJson)!;
-            List<Claim> claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, userDto.UserName),
-                new Claim(ClaimTypes.NameIdentifier, userDto.Id.ToString()),
-            };
-            ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth");
-            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
-            return new AuthenticationState(claimsPrincipal);
         }
-        
 
         public async Task Logout()
         {
-            await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", "");
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new())));
+            _currentClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
+            await _jsRuntime.InvokeVoidAsync("sessionStorage.removeItem", "currentUser");
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_currentClaimsPrincipal)));
         }
     }
 }

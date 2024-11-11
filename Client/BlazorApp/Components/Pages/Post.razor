@@ -3,37 +3,57 @@
 @using BlazorApp.Services.PostService
 @rendermode InteractiveServer
 @inject IPostService PostService
+@inject AuthenticationStateProvider AuthProvider
 
 <h3>Create Post</h3>
 
 <EditForm Model="newPost" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
 
     <div>
         <label>Title:</label>
-        <InputText @bind-Value="newPost.Title" />
+        <InputText @bind-Value="newPost.Title"/>
     </div>
 
     <div>
         <label>Body:</label>
-        <InputTextArea @bind-Value="newPost.Body" />
+        <InputTextArea @bind-Value="newPost.Body"/>
     </div>
 
-    <button @onclick="HandleValidSubmit">Add Post</button>
+    <button type="submit" class="btn btn-primary">Add Post</button>
 </EditForm>
 
 @code {
+
     private CreatePostDto newPost = new()
     {
-        Title = null,
-        Body = null,
-        AuthorId = 1
+        Title = string.Empty,
+        Body = string.Empty,
+        AuthorId = 0
     };
 
     private async Task HandleValidSubmit()
     {
-        await PostService.CreatePostAsync(newPost);
-  
+        var authState = await AuthProvider.GetAuthenticationStateAsync();
+        var userIdClaim = authState.User.FindFirst("Id");
+
+        if (userIdClaim != null)
+        {
+            newPost.AuthorId = int.Parse(userIdClaim.Value); 
+            await PostService.CreatePostAsync(newPost);
+
+          
+            newPost = new CreatePostDto
+            {
+                Title = string.Empty,
+                Body = string.Empty,
+                AuthorId = 0 
+            };
+        }
+        else
+        {
+            Console.WriteLine("User not logged in, or id not found.");
+        }
     }
 }
