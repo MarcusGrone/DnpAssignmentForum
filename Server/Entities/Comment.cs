@@ -7,6 +7,10 @@ public class Comment
     public int PostId { get; set; }
     public string Body { get; set; }
     
+    public Post Post { get; set; }
+    public User User { get; set; }
+    
+    private Comment() { }
 
     public Comment(string body, int userId, int postId)
     {
@@ -15,8 +19,5 @@ public class Comment
         PostId = postId;
     }
 
-    public Comment()
-    {
-    
-    }
+
 }

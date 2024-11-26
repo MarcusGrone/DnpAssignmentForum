@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Client\BlazorApp\BlazorApp.csproj" />
+      <ProjectReference Include="..\..\Shared\ApiContracts_Dto\ApiContracts_Dto.csproj" />
+      <ProjectReference Include="..\CLI\CLI.csproj" />
+      <ProjectReference Include="..\Entities\Entities.csproj" />
+      <ProjectReference Include="..\FileRepositories\FileRepositories.csproj" />
+      <ProjectReference Include="..\InMemoryRepositories\InMemoryRepositories.csproj" />
+      <ProjectReference Include="..\RepositoryContracts\RepositoryContracts.csproj" />
+      <ProjectReference Include="..\WebAPI\WebAPI.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations\" />
+    </ItemGroup>
+
+</Project>

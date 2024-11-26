@@ -118,18 +118,5 @@ public class UserFileRepository : IUserRepository
     }
 
 
-    public void InitializeDummyData()
-    {
-        int nextUserId = 1;
-
-        List<User> users = new List<User>
-        {
-            new User("john_doe", "password123") { UserId = nextUserId++ },
-            new User("jane_smith", "mypassword") { UserId = nextUserId++ },
-            new User("emily_clark", "emily2024") { UserId = nextUserId++ }
-        };
-
-        string userAsJson = JsonSerializer.Serialize(users);
-        File.WriteAllText(filePath, userAsJson);
-    }
+  
 }

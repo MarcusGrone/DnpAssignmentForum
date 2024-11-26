@@ -27,7 +27,7 @@ public class LifecycleUserCLIView
             switch (input)
             {
                 case "1":
-                    await CreateUserAsync();
+                   
                     break;
                 case "2":
                     await UpdateUserAsync();
@@ -45,7 +45,7 @@ public class LifecycleUserCLIView
         }
     }
 
-    private async Task CreateUserAsync()
+  /*  private async Task CreateUserAsync()
     {
         Console.WriteLine("Enter a username:");
         var username = Console.ReadLine();
@@ -53,14 +53,14 @@ public class LifecycleUserCLIView
         Console.WriteLine("Enter a password:");
         var password = Console.ReadLine();
 
-        var newUser = new Entities.User(username, password);
+        var newUser = new Entities.User();
 
         await _userRepository.AddAsync(newUser);
 
         Console.WriteLine($"User {username}, was created successfully");
         Console.WriteLine("Press any key to return to the menu...");
         Console.ReadKey();
-    }
+    } */
 
     private async Task UpdateUserAsync()
     {

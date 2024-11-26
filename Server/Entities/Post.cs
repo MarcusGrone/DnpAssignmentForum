@@ -7,7 +7,10 @@ public class Post
     public string Title { get; set; }
     public string Body { get; set; }
     
-    public Post() { }
+    public User User { get; set; }
+    public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+    
+    private Post() { }
 
     public Post(int postId, int userId, string title, string body)
     {
@@ -23,6 +26,7 @@ public class Post
         Body = requestBody;
         UserId = requestAuthorId;
     }
+    
     
     
 }

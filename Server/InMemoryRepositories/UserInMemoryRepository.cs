@@ -11,7 +11,7 @@ public class UserInMemoryRepository : IUserRepository
     public UserInMemoryRepository()
     {
         users = new List<User>();
-        InitializeDummyData();
+       
     }
 
     public Task<User> AddAsync(User user)
@@ -78,19 +78,6 @@ public class UserInMemoryRepository : IUserRepository
     }
 
 
-    public void InitializeDummyData()
-    {
-        if (isInitialized) return;  
-
-        int nextUserId = 1;
-        users.AddRange(new List<User>
-        {
-            new User("JohnDoe", "password123") { UserId = nextUserId++ },
-            new User("JaneSmith", "password456") { UserId = nextUserId++ },
-            new User("AliceJones", "password789") { UserId = nextUserId++ }
-        });
-
-        isInitialized = true;
-    }
+   
     
 }

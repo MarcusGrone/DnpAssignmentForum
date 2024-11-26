@@ -35,13 +35,8 @@ public class CommentsController : ControllerBase
             return BadRequest("Post not found.");
         }
 
-      
-        var comment = new Comment
-        {
-            Body = request.Body,
-            UserId = request.AuthorId,
-            PostId = request.PostId
-        };
+        
+        var comment = new Comment(request.Body, request.AuthorId, request.PostId);
         var createdComment = await _commentRepository.AddAsync(comment);
 
   
