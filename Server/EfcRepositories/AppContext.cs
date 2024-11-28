@@ -9,8 +9,7 @@ public class AppContext : DbContext
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<User> Users => Set<User>();
 
-    protected override void OnConfiguring(DbContextOptionsBuilder  optionsBuilder)
+    public AppContext(DbContextOptions<AppContext> options) : base(options)
     {
-        optionsBuilder.UseSqlite("Data Source=app.db"); 
     }
 }
